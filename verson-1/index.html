@@ -1,0 +1,131 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <style media="screen">
+        canvas {
+            border: 1px black solid;
+            margin-left: 20vw;
+        }
+        section{
+            margin-left: 20vw;
+        }
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- <link rel="stylesheet" type="text/css" media="screen" href="main.css" /> -->
+</head>
+<body>
+    <canvas id="id-canvas" width="400" height="600"></canvas>
+    <br>
+    <section>
+        <div>
+            <label>
+                <input class="game-auto-slider" id="id_fps" type="range" name="points" value="60" min="1" max="1000" />
+                fps：<span class="game-span"></span>
+            </label>
+        </div>
+        <div>
+            <label>
+                <input class="game-auto-slider" id="player_speed" type="range" data-value="config.player_speed" value="60" min="1"
+                    max="10" />
+                玩家飞机速度：<span class="game-span"></span>
+            </label>
+        </div>
+        <div>
+            <label>
+                <input class="game-auto-slider" id="player_speed" type="range" data-value="config.bullet_speed" value="1" min="1"
+                    max="10" />
+                玩家子弹速度：<span class="game-span"></span>
+            </label>
+        </div>
+        <div>
+            <label>
+                <input class="game-auto-slider" id="player_speed" type="range" data-value="config.player_cooldown" value="9"
+                    min="9" max="120" />
+                玩家冷却速度：<span class="game-span"></span>
+            </label>
+        </div>
+        <div>
+            <label>
+                <input class="game-auto-slider" id="player_speed" type="range" data-value="config.enemybullet_speed" value="12"
+                    min="1" max="20" />
+                敌机子弹速度：<span class="game-span"></span>
+            </label>
+        </div>
+        <div>
+            <label>
+                <input class="game-auto-slider" id="player_speed" type="range" data-value="config.enemy_cooldown" value="240"
+                    min="120" max="480" />
+                敌机子弹冷却速度：<span class="game-span"></span>
+            </label>
+        </div>
+        <div>
+            <label>
+                <input class="game-auto-slider" id="player_speed" type="range" data-value="config.backGround_bgspeed" value="1"
+                    min="0" max="10" />
+                背景速度：<span class="game-span"></span>
+            </label>
+        </div>
+        <div>
+            <label>
+                <input class="game-auto-slider" id="player_speed" type="range" data-value="config.enemy_number" value="12" min="1"
+                    max="14" />
+                敌机数量：<span class="game-span"></span>
+            </label>
+        </div>
+    </section>
+
+    <script>
+        // var config = {
+        //     player_speed: 2,
+        //     player_cooldown: 60,
+        //     enemy_speed: 30, //
+        //     enemy_cooldown: 240,
+        //     backGround_bgspeed: 1,
+        //     bullet_speed: 1,
+        //     enemybullet_speed: 0.3,
+        //     enemy_number: 12,
+        // } 
+        var es = sel => document.querySelectorAll(sel)
+        var bindAll = function (sel, eventName, callback) {
+            var selAll = es(sel)
+            for (let i = 0; i < selAll.length; i++) {
+                let input = selAll[i];
+                input.addEventListener(eventName, function (event) {
+                    callback(event)
+                })
+            }   
+        }
+        bindAll('.game-auto-slider', 'input', function(event){
+            let target = event.target
+            let v = target.value
+            let bindValue = target.dataset.value
+            // config[bindValue] = Number(v) //player_speed
+            eval(bindValue + '=' + v)
+
+            let span = target.closest('label').querySelector('.game-span')
+            span.innerText = String(v)
+        })
+    </script>
+   
+    <script src="game/utils.js"></script>
+    <script src="game/game_scene.js"></script>
+    <script src="game/game_game.js"></script>
+    <script src="game/game_image.js"></script>
+    <script src="game/game_animation.js"></script>
+
+    <script src="levels.js"></script>
+    
+    <script src="scene/main/paddle.js"></script>
+    <script src="scene/main/ball.js"></script>
+    <script src="scene/main/block.js"></script>
+    <script src="scene/main/scene.js"></script>
+    <script src="scene/end/scene_end.js"></script>
+    <script src="scene/title/scene_title.js"></script>
+    
+    <script src="main.js"></script>
+</body>
+</html>
