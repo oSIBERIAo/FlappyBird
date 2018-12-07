@@ -20,13 +20,52 @@
 <body>
     <canvas id="id-canvas" width="400" height="600"></canvas>
     <br>
-    <section>
+    <section id="game_control">
         <div>
             <label>
                 <input class="game-auto-slider" id="id_fps" type="range" name="points" value="60" min="1" max="1000" />
                 fps：<span class="game-span"></span>
             </label>
         </div>
+    </section>
+
+    <script>
+        // var config = {
+        //     player_speed: 2,
+        //     player_cooldown: 60,
+        //     enemy_speed: 30, //
+        //     enemy_cooldown: 240,
+        //     backGround_bgspeed: 1,
+        //     bullet_speed: 1,
+        //     enemybullet_speed: 0.3,
+        //     enemy_number: 12,
+        // } 
+        
+    </script>
+
+    <script src="config.js"></script>
+    <script src="levels.js"></script>
+   
+    <script src="game/utils.js"></script>
+    <script src="game/game_scene.js"></script>
+    <script src="game/game_game.js"></script>
+    <script src="game/game_image.js"></script>
+    <script src="game/game_animation.js"></script>
+
+
+    
+    <script src="scene/main/paddle.js"></script>
+    <script src="scene/main/ball.js"></script>
+    <script src="scene/main/block.js"></script>
+    <script src="scene/main/scene.js"></script>
+    <script src="scene/main/scene_bird.js"></script>
+    <script src="scene/end/scene_end.js"></script>
+    <script src="scene/title/scene_title.js"></script>
+    
+    <script src="main.js"></script>
+</body>
+</html>
+<!-- 
         <div>
             <label>
                 <input class="game-auto-slider" id="player_speed" type="range" data-value="config.player_speed" value="60" min="1"
@@ -75,57 +114,4 @@
                     max="14" />
                 敌机数量：<span class="game-span"></span>
             </label>
-        </div>
-    </section>
-
-    <script>
-        // var config = {
-        //     player_speed: 2,
-        //     player_cooldown: 60,
-        //     enemy_speed: 30, //
-        //     enemy_cooldown: 240,
-        //     backGround_bgspeed: 1,
-        //     bullet_speed: 1,
-        //     enemybullet_speed: 0.3,
-        //     enemy_number: 12,
-        // } 
-        var es = sel => document.querySelectorAll(sel)
-        var bindAll = function (sel, eventName, callback) {
-            var selAll = es(sel)
-            for (let i = 0; i < selAll.length; i++) {
-                let input = selAll[i];
-                input.addEventListener(eventName, function (event) {
-                    callback(event)
-                })
-            }   
-        }
-        bindAll('.game-auto-slider', 'input', function(event){
-            let target = event.target
-            let v = target.value
-            let bindValue = target.dataset.value
-            // config[bindValue] = Number(v) //player_speed
-            eval(bindValue + '=' + v)
-
-            let span = target.closest('label').querySelector('.game-span')
-            span.innerText = String(v)
-        })
-    </script>
-   
-    <script src="game/utils.js"></script>
-    <script src="game/game_scene.js"></script>
-    <script src="game/game_game.js"></script>
-    <script src="game/game_image.js"></script>
-    <script src="game/game_animation.js"></script>
-
-    <script src="levels.js"></script>
-    
-    <script src="scene/main/paddle.js"></script>
-    <script src="scene/main/ball.js"></script>
-    <script src="scene/main/block.js"></script>
-    <script src="scene/main/scene.js"></script>
-    <script src="scene/end/scene_end.js"></script>
-    <script src="scene/title/scene_title.js"></script>
-    
-    <script src="main.js"></script>
-</body>
-</html>
+        </div> -->

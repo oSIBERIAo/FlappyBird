@@ -3,10 +3,19 @@ class SceneTitle extends GameScene {
         super(game)
         this.game = game
 
-        
+        this.setup()
 
         // this.gameLable = GameLable.new(this.game, "开始，按K开始游戏")
         // this.addElement(this.gameLable)
+ 
+        this.setupInputs()
+    }
+    setup() {
+        var game = this.game
+         
+        this.score = 0
+        this.die = false
+
         this.bg = BackGround.new(game)
         this.bg.x = 0
         this.bg2 = BackGround.new(game)
@@ -15,38 +24,37 @@ class SceneTitle extends GameScene {
 
         this.pipes = Pipes.new(game)
         this.addElement(this.pipes)
-
+        
         this.grounds = []
         for (let i = 0; i < 10; i++) {
             let g = Ground.new(game)
-            g.y = 500
-            g.x = 48 * i
+            g.y = config.groundsY.value
+            g.x = g.w * i
             this.addElement(g)
             this.grounds.push(g)
         }
-
+        
         this.gameAnimation = GameAnimation.new(this.game)
         this.addElement(this.gameAnimation)
- 
-        this.setupInputs()
+
+        this.lable = GameLable.new(game, this.score)
+        this.addElement(this.lable)
     }
-    removeCheck(a, b) {
+    intersectsCheck(a, b) {
         for (let i = 0; i < this.elements.length; i++) {
             if (this.elements[i] instanceof a) {
                 for (let x = 0; x < this.elements.length; x++) {
                     if (this.elements[x] instanceof b) {
-                        let c = this.elements[i]
+                        let c = this.elements[i] //pipes
                         let b = this.elements[x]
                         // log('111', b, c)
                         for (let y = 0; y < c.pipes.length; y++) {
-                            let a = c.pipes[y]                 
+                            let a = c.pipes[y]    //pipe             
                             
                             let result = rectIntersects(a, b) || rectIntersects(b, a)
                             if (result) {
-                                //标记去除并添加爆炸效果
-                                // a.status = false
-                                // b.status = false
                                 this.gameAnimation.over()
+                                this.die = true
                             }
                             
                         }
@@ -55,16 +63,9 @@ class SceneTitle extends GameScene {
             }
         }
     }
-    remove() {
-        let statusCheck = function (elements) {
-            return elements.status != false
-        }
-        this.elements = this.elements.filter(statusCheck)
-    }
     draw() {
         super.draw()
     }
-    
     setupInputs() {
         // this.game.registerAction("a", (keyStatus) => {
         //     this.gameAnimation.moveLeft(keyStatus)
@@ -79,7 +80,7 @@ class SceneTitle extends GameScene {
             this.replceScene()
         })
         this.replceScene = function () {
-            var start = new Scene(this.game)
+            var start = new SceneBird(this.game)
             this.game.replceScene(start)
         }
         document.querySelector('#id_fps').addEventListener("input", function (e) {
@@ -87,8 +88,8 @@ class SceneTitle extends GameScene {
         })
     }
     update() {
-        super.update()
-        this.removeCheck(Pipes, GameAnimation)
+        this.intersectsCheck(Pipes, GameAnimation)
+        super.update()     
     }
 }
 
@@ -117,10 +118,8 @@ class Pipe {
 class Pipes {
     constructor(game) {
         this.game = game
-        var name = 'pipe'
         // super(game, name)
-        
-        
+
         this.setup()
     }
     static new(game) {
@@ -128,6 +127,8 @@ class Pipes {
         return i
     }
     setup() {
+        this.score = 0
+        this.scoreCount = 2
         this.speed = 1
         this.pipes = []
         for (let i = 0; i < 3; i++) {
@@ -137,7 +138,7 @@ class Pipes {
             p2.x += (i + 2) * 300
 
             p1.y = randomBetween(-380, -110)
-            p2.y = p1.h + p1.y + 180
+            p2.y = p1.h + p1.y + config.pipe_space.value
             p2.flipY = true
             // this.game.drawImage(p1, p2)
             this.pipes.push(p1)
@@ -149,6 +150,26 @@ class Pipes {
             pipe.x -= this.speed
             if (pipe.x < -300) {
                 pipe.x = 2 * 300 + this.speed
+            }
+
+            // 越过 小鸟x 150坐标且未死亡
+            if (pipe.x == 150 && !this.game.scene.die) {
+                this.scoreCount--
+                if (this.scoreCount == 0) {
+                    this.scoreCount = 2
+                    this.score += 1
+                }
+            }
+
+            // 更新同步scene的分数
+            if (this.game.scene.die) {
+                if (this.game.scene.score == this.score) {
+                    this.game.scene.score -= 1
+                }
+            }
+            // 判定死亡前多得1分，特殊处理
+            if (!this.game.scene.die) {
+                this.game.scene.score = this.score
             }
         });
     }
@@ -182,9 +203,7 @@ class GameLable {
         return i
     }
     update() {    
-        if (this.game.scene.score > 0) {
-            this.text = this.game.scene.score
-        }
+        this.text = this.game.scene.score
     }
     draw() {
         this.game.context.fillStyle = "#FF3300"
@@ -192,6 +211,7 @@ class GameLable {
         this.game.context.fillText(this.text, this.x, this.y);
     }
 }
+
 class GameParticleSystem {
     constructor(game, point) {
         this.game = game

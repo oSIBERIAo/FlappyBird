@@ -34,7 +34,7 @@ class GameAnimation {
         // 当前帧 当前帧下标 动画冷却 
         this.framesCurrent = this.frames()[0]
         this.frameIndex = 0
-        this.framesCooldown = config.frames_cooldown
+        this.framesCooldown = config.frames_cooldown.value
     }
     init(numberOfFrames) {
         var loadFrames = (key) => {
@@ -117,6 +117,7 @@ class GameAnimation {
     }
     over() {
         this.die = true
+
     }
     moveLeft(status) {
         this.changeAnimation(status)

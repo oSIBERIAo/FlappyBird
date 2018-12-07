@@ -1,16 +1,3 @@
-var config = {
-    player_speed: 2,
-    player_cooldown: 60,
-    // enemy_speed: 30, //
-    enemy_cooldown: 240,
-    backGround_bgspeed: -1,
-    Ground_bgspeed: -1,
-    bullet_speed: 1,
-    enemybullet_speed: 12,
-    enemy_number: 12,
-    frames_cooldown: 10,
-}
-
 class GameImage {
     constructor(game, name) {
         this.game = game
@@ -140,16 +127,17 @@ class BackGround extends GameImage {
         return i
     }
     setup() {
-        this.bgspeed = config.backGround_bgspeed
+        // this.bgspeed = config.backGround_bgspeed.value
     }
     update() {
-        this.x += this.bgspeed
+        let bgspeed = config.backGround_bgspeed.value
+        this.x += bgspeed
         if (this.x + this.w < 0) {
-            return this.x = this.w  + this.bgspeed
+            return this.x = this.w + bgspeed
         }
     }
     debug() {
-        this.bgspeed = config.backGround_bgspeed
+        this.bgspeed = config.backGround_bgspeed.value
     }  
 }
 class Ground extends GameImage {
@@ -164,7 +152,7 @@ class Ground extends GameImage {
         return i
     }
     setup() {
-        this.bgspeed = config.Ground_bgspeed
+        this.bgspeed = config.Ground_bgspeed.value
     }
     update() {
         this.x += this.bgspeed
@@ -173,7 +161,7 @@ class Ground extends GameImage {
         }
     }
     debug() {
-        this.bgspeed = config.Ground_bgspeed
+        this.bgspeed = config.Ground_bgspeed.value
     }
 }
 
